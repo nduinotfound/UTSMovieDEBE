@@ -10,62 +10,57 @@
     </div>
 @endif
 
+{{-- Styling tambahan untuk refactor tampilan --}}
 <style>
-    body {
-        background-color: #f8f9fa;
-    }
     .movie-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        background-color: #ffffff;
-        border-radius: 10px;
+        transition: 0.3s ease;
+        border-radius: 12px;
+        overflow: hidden;
     }
     .movie-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+    .movie-img {
+        height: 250px;
+        object-fit: cover;
+        width: 100%;
     }
     .movie-title {
-        color: #343a40;
-        font-weight: 700;
-    }
-    .movie-text {
-        color: #6c757d;
-    }
-    .btn-custom {
-        background-color: #20c997;
-        border-color: #20c997;
-        color: #fff;
-    }
-    .btn-custom:hover {
-        background-color: #17a2b8;
-        border-color: #17a2b8;
+        color: #0d6efd;
+        font-weight: bold;
     }
 </style>
 
-<h1 class="mb-4 text-center text-dark fw-bold">🎬 Popular Movies</h1>
+{{-- Judul halaman ditengah dengan gaya lebih menonjol --}}
+<h1 class="mb-5 text-center text-primary fw-bold">🎬 Popular Movies</h1>
 
-<div class="row row-cols-1 row-cols-md-2 g-4">
+{{-- Refactor utama: layout diubah dari horizontal (gambar kiri, teks kanan) ke vertikal --}}
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     @foreach ($movies as $movie)
     <div class="col">
-        <div class="card movie-card h-100 border-0 shadow-sm">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="/images/{{ $movie['foto_sampul'] }}" class="img-fluid rounded-start h-100 object-fit-cover" alt="{{ $movie['judul'] }}">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body d-flex flex-column justify-content-between h-100">
-                        <div>
-                            <h5 class="movie-title">{{ $movie['judul'] }}</h5>
-                            <p class="movie-text text-truncate" style="max-height: 4.5em;">{{ $movie['sinopsis'] }}</p>
-                        </div>
-                        <a href="/movie/{{ $movie['id'] }}" class="btn btn-custom btn-sm mt-3">Lihat Selanjutnya</a>
-                    </div>
-                </div>
+        {{-- Card film dengan struktur vertikal --}}
+        <div class="card movie-card h-100 shadow-sm border-0 text-center">
+            {{-- Gambar dipindahkan ke atas --}}
+            <img src="/images/{{ $movie['foto_sampul'] }}" alt="{{ $movie['judul'] }}" class="movie-img">
+
+            {{-- Konten teks dan tombol berada di bawah gambar --}}
+            <div class="card-body d-flex flex-column justify-content-between">
+                {{-- Judul film --}}
+                <h5 class="movie-title">{{ $movie['judul'] }}</h5>
+
+                {{-- Sinopsis dipersingkat (truncate) --}}
+                <p class="card-text text-muted text-truncate" style="max-height: 4.5em;">{{ $movie['sinopsis'] }}</p>
+
+                {{-- Tombol diarahkan ke detail --}}
+                <a href="/movie/{{ $movie['id'] }}" class="btn btn-primary btn-sm mt-2">Lihat Selanjutnya</a>
             </div>
         </div>
     </div>
     @endforeach
 </div>
 
+{{-- Navigasi halaman tetap di bawah --}}
 <div class="d-flex justify-content-center mt-4">
     {{ $movies->links() }}
 </div>
